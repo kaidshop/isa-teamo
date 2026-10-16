@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para Isabela ❤️ De mi corazón para ti</title>
+  
+  <!-- Favicon de Corazón -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Fondo de partículas flotantes -->
+  <div id="heart-canvas-container">
+    <canvas id="bg-canvas"></canvas>
+  </div>
+
+  <!-- Barra de Audio Flotante -->
+  <div class="music-pill" id="music-control">
+    <button id="music-btn" class="music-toggle-btn" title="Música romántica">
+      <i data-lucide="music" class="music-icon spinning"></i>
+      <span id="music-status">Tocar melodía</span>
+    </button>
+  </div>
+
+  <!-- PANTALLA 1: SOBRE DE CARTA INTERACTIVO (INTRODUCION) -->
+  <section class="envelope-hero" id="envelope-section">
+    <div class="envelope-wrapper">
+      <div class="sparkle-badge">✨ Un regalo muy especial para ti ✨</div>
+      <h1 class="main-title">Hola, mi amor Isabela...</h1>
+      <p class="subtitle">He preparado este pequeño rincón en el universo para decirte lo mucho que te amo.</p>
+      
+      <!-- Carta con animación interactiva -->
+      <div class="envelope-box" id="envelope">
+        <div class="envelope-flap"></div>
+        <div class="envelope-pocket"></div>
+        <div class="letter-preview">
+          <div class="heart-stamp">💌</div>
+          <p>Toca para abrir mi corazón</p>
+        </div>
+      </div>
+      <button class="open-btn" id="open-letter-btn">
+        <span>Abrir la sorpresa</span>
+        <i data-lucide="sparkles"></i>
+      </button>
+    </div>
+  </section>
+
+  <!-- CONTENIDO PRINCIPAL (SE REVELA TRAS ABRIR) -->
+  <main class="main-content" id="main-content">
+    
+    <!-- Hero Banner -->
+    <header class="romantic-header">
+      <div class="badge">Para el amor de mi vida</div>
+      <h1 class="romantic-heading">Isabela</h1>
+      <p class="romantic-quote">"Si tuviera que elegir un solo lugar en el mundo para quedarme por siempre, sería entre tus brazos."</p>
+      <div class="scroll-indicator">
+        <span>Desliza para ver más</span>
+        <i data-lucide="chevron-down"></i>
+      </div>
+    </header>
+
+    <!-- Contador de Tiempo Juntos -->
+    <section class="section-card counter-section">
+      <div class="section-tag">
+        <i data-lucide="clock"></i> Nuestro Tiempo
+      </div>
+      <h2>Cada segundo a tu lado vale oro</h2>
+      <p class="section-desc">El tiempo vuela, pero a tu lado cada instante se vuelve un recuerdo eterno.</p>
+      
+      <div class="timer-grid" id="timer-grid">
+        <div class="time-box">
+          <span class="time-number" id="days">00</span>
+          <span class="time-label">Días</span>
+        </div>
+        <div class="time-box">
+          <span class="time-number" id="hours">00</span>
+          <span class="time-label">Horas</span>
+        </div>
+        <div class="time-box">
+          <span class="time-number" id="minutes">00</span>
+          <span class="time-label">Minutos</span>
+        </div>
+        <div class="time-box">
+          <span class="time-number" id="seconds">00</span>
+          <span class="time-label">Segundos</span>
+        </div>
+      </div>
+      <div class="timer-controls">
+        <label for="love-date-picker">¿Quieres ajustar la fecha de inicio?</label>
+        <div class="date-input-wrapper">
+          <input type="date" id="love-date-picker" value="2024-01-01">
+        </div>
+      </div>
+    </section>
+
+    <!-- Carta de Amor Sincera -->
+    <section class="section-card letter-section">
+      <div class="letter-paper">
+        <div class="letter-header">
+          <span class="letter-to">Mi amada Isabela,</span>
+          <span class="letter-date" id="current-letter-date"></span>
+        </div>
+        <div class="letter-body">
+          <p class="typewriter-text" id="typewriter-body">
+            No hay suficientes palabras ni estrellas en el firmamento para explicarte lo que provocas en mí. Llegaste a mi vida como una luz cálida, transformando mis días grises en sonrisas infinitas. Amo tu ternura, la forma tan única en la que me miras, cómo me haces sentir en calma aun cuando el mundo parece un caos, y sobre todo, amo construir a tu lado este hermoso camino.
+          </p>
+          <p>
+            Prometo cuidarte, abrazarte en tus días difíciles, celebrar cada uno de tus triunfos y amarte más cada nuevo amanecer. Eres mi lugar seguro y mi mayor alegría.
+          </p>
+        </div>
+        <div class="letter-footer">
+          <p>Con todo mi corazón,</p>
+          <span class="signature">Tu eterno enamorado 💕</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Generador Interactivo: Razones para Amarte -->
+    <section class="section-card reasons-section">
+      <div class="section-tag">
+        <i data-lucide="heart"></i> Infinitos Motivos
+      </div>
+      <h2>¿Por qué te amo tanto?</h2>
+      <p class="section-desc">Toca el botón mágico para descubrir un motivo nuevo cada vez:</p>
+
+      <div class="reason-display-card" id="reason-card">
+        <div class="reason-icon">💖</div>
+        <h3 id="reason-text">"Amo tu risa que ilumina cualquier día nublado."</h3>
+      </div>
+
+      <div class="reason-actions">
+        <button class="btn-primary" id="btn-next-reason">
+          <i data-lucide="sparkles"></i> Descubrir otra razón
+        </button>
+        <span class="reason-counter" id="reason-counter">Razón 1 de 20</span>
+      </div>
+    </section>
+
+    <!-- Galería de Recuerdos Estilo Polaroids -->
+    <section class="section-card gallery-section">
+      <div class="section-tag">
+        <i data-lucide="camera"></i> Álbum De Recuerdos
+      </div>
+      <h2>Nuestros Momentos Inolvidables</h2>
+      <p class="section-desc">Pasa el ratón sobre cada foto o tócala para verla mejor. ¡Puedes personalizar estas fotos!</p>
+
+      <div class="polaroid-grid">
+        <div class="polaroid-item" style="--rotation: -3deg;">
+          <div class="polaroid-pin">📌</div>
+          <div class="polaroid-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=700&q=80" alt="Amor" class="polaroid-img" />
+          </div>
+          <p class="polaroid-caption">Donde empezó nuestra magia ✨</p>
+        </div>
+
+        <div class="polaroid-item" style="--rotation: 2deg;">
+          <div class="polaroid-pin">📌</div>
+          <div class="polaroid-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=700&q=80" alt="Juntos" class="polaroid-img" />
+          </div>
+          <p class="polaroid-caption">Tus abrazos son mi hogar 🫂</p>
+        </div>
+
+        <div class="polaroid-item" style="--rotation: -2deg;">
+          <div class="polaroid-pin">📌</div>
+          <div class="polaroid-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=700&q=80" alt="Sonrisas" class="polaroid-img" />
+          </div>
+          <p class="polaroid-caption">Risas que no cambiaría por nada 🌸</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Boleto Interactivo de Amor / Mini Juego -->
+    <section class="section-card question-section">
+      <div class="ticket-container">
+        <div class="ticket-header">
+          <i data-lucide="ticket"></i>
+          <span>BOLETO OFICIAL PARA TODA LA VIDA</span>
+        </div>
+        <div class="ticket-body">
+          <h3>Isabela, ¿me concedes el honor de seguir amándote para siempre?</h3>
+          <p>Este pase incluye abrazos ilimitados, besitos mañaneros y apoyo incondicional.</p>
+          
+          <div class="interactive-decision-area">
+            <button class="btn-yes" id="btn-yes">
+              <span>¡SÍ, ACEPTO! 💍❤️</span>
+            </button>
+            <button class="btn-no" id="btn-no">
+              <span>No 😢</span>
+            </button>
+          </div>
+          <div id="accepted-message" class="accepted-message hidden">
+            <div class="stamp-accepted">❤️ VÁLIDO PARA SIEMPRE ❤️</div>
+            <h4>¡Sabía que dirías que sí! Te amo con todo mi ser, Isabela.</h4>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Romántico -->
+    <footer class="romantic-footer">
+      <div class="footer-heart">
+        <i data-lucide="heart" class="beat-heart"></i>
+      </div>
+      <p>Hecho con amor exclusivo para <strong>Isabela</strong></p>
+      <p class="footer-sub">Para siempre y por siempre juntos.</p>
+    </footer>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
