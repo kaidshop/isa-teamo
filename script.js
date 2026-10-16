@@ -2,12 +2,10 @@
 // CONFIGURACIÓN E INICIALIZACIÓN
 // ============================================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Inicializar Lucide Icons
   if (window.lucide) {
     window.lucide.createIcons();
   }
 
-  // Inicializar funciones interactivas
   initCanvasHearts();
   initEnvelopeOpener();
   initLoveCounter();
@@ -37,7 +35,7 @@ function playSong() {
       if (musicStatus) musicStatus.textContent = "KRIS R - 4LIFE 🎶";
       if (musicIcon) musicIcon.classList.add('spinning');
     }).catch((err) => {
-      console.log("Reproducción esperando interacción:", err);
+      console.log("Audio esperando interacción del usuario:", err);
     });
   }
 }
@@ -182,7 +180,7 @@ function initEnvelopeOpener() {
       colors: ['#ffe5ec', '#ff758f', '#ffffff', '#fbb1bd']
     });
 
-    // Iniciar canción oficial KRIS R - 4LIFE
+    // Iniciar canción
     playSong();
 
     envelopeSection.classList.add('fade-out');
@@ -207,13 +205,13 @@ function initLoveCounter() {
   const secondsEl = document.getElementById('seconds');
   const datePicker = document.getElementById('love-date-picker');
 
-  // Limpiar cualquier fecha antigua guardada en 2024
+  // Limpiar cualquier residuo de 2024
   const stored = localStorage.getItem('isa_love_start_date');
   if (stored && stored.includes('2024')) {
     localStorage.removeItem('isa_love_start_date');
   }
 
-  // Fecha fija oficial: 28 de agosto de 2026 (1 mes cumplido el 28 de septiembre)
+  // Fecha fija: 28 de agosto (cumplieron 1 mes el 28 de septiembre)
   const officialStartDate = '2026-08-28';
   const effectiveDate = localStorage.getItem('isa_love_start_date') || officialStartDate;
 
@@ -260,30 +258,30 @@ function initLoveLetterDate() {
 }
 
 // ============================================================
-// 5. GENERADOR DE RAZONES PARA AMARTE
+// 5. GENERADOR DE COSAS QUE SERGIO AMA DE ISABELA (A DISTANCIA)
 // ============================================================
 function initReasonsGenerator() {
   const reasons = [
-    "Amo cómo nos divertimos juntos jugando y riendo.",
-    "Amo que cada 28 sea un recordatorio de lo mucho que te quiero.",
-    "Amo tu voz, es la melodía más dulce que he escuchado.",
-    "Amo que contigo puedo ser yo mismo sin miedo a nada.",
-    "Amo la forma en que me miras y me haces sentir en las nubes.",
-    "Amo tus abrazos, son mi lugar favorito en el mundo entero.",
-    "Amo tus ocurrencias y la facilidad con la que me sacas una sonrisa.",
-    "Amo soñar despierto e imaginar un futuro infinito a tu lado.",
-    "Amo cuando nos quedamos hablando de cualquier tontería.",
-    "Amo cómo te preocupas por mí con ese corazón tan noble.",
-    "Amo que cada segundo a tu lado siempre se me pasa volando.",
-    "Amo celebrar cada 28 a tu lado y ver cómo crece nuestro amor.",
-    "Amo que eres mi personita favorita en todo el universo.",
-    "Amo ver cómo sonríes cuando te digo que te amo.",
-    "Amo cada detalle, cada gesto y cada momento juntos.",
-    "Amo lo hermosa y única que eres por dentro y por fuera.",
-    "Amo que me alegres el día con un solo mensajito tuyo.",
-    "Amo nuestro primer mes y todos los meses que aún nos faltan por vivir.",
-    "Amo que seas mi niña consentida.",
-    "¡Y sobre todo, amo que existas y seas mi Isabela hermosa!"
+    "Amo quedarme horas en videollamada contigo hasta que se nos pasa el tiempo sin darnos cuenta.",
+    "Amo ver cómo te ríes frente a la pantalla y se te achinan los ojitos.",
+    "Amo jugar Roblox juntos y hacer tonterías hasta tarde.",
+    "Amo que cada 28 sea nuestro día especial y lo celebremos juntos.",
+    "Amo cuando nos quedamos dormidos en llamada y saber que estás ahí conmigo.",
+    "Amo los mensajitos de buenos días que me mandas apenas te levantas.",
+    "Amo cuando me cuentas cómo estuvo tu día con tanta emoción.",
+    "Amo tus fotos y los videitos tiernos que me mandas cuando te arreglas.",
+    "Amo que la distancia no importe para nada cuando se trata de lo que sentimos.",
+    "Amo imaginar el día exacto en que por fin llegue a donde estás y te dé ese abrazo tan esperado.",
+    "Amo que seas mi niña consentida y la persona que más me alegra el día.",
+    "Amo tus celitos tiernos y las caritas chistosas que me haces en la cámara.",
+    "Amo cómo nos apoyamos en todo a pesar de los kilómetros.",
+    "Amo que contigo puedo ser yo mismo, decir tonterías y reírnos a carcajadas.",
+    "Amo planear todo lo que vamos a hacer juntos cuando nos veamos en persona.",
+    "Amo tu voz en los audios de WhatsApp, me da una paz increíble.",
+    "Amo nuestro primer mes y todos los meses que nos faltan por cumplir.",
+    "Amo lo hermosa que eres, por fuera y sobre todo por dentro.",
+    "Amo que seas tú, mi Isabela, la única dueña de mi corazón.",
+    "¡Y sobre todo, amo ser tu novio Sergio y que tú seas mi niña hermosa!"
   ];
 
   let currentIndex = 0;
@@ -329,12 +327,11 @@ function initEscapingNoButton() {
   if (!btnNo || !btnYes) return;
 
   const playfulPhrases = [
-    "¡Ups, se me escapó!",
+    "¡Ey, no se vale! 😂",
     "¿Segura, mi amor? 🥺",
-    "¡Ese botón no sirve!",
-    "Por aquí no es 💕",
-    "Ni lo pienses jaja",
-    "¡El 'SÍ' te está esperando!"
+    "¡Ni lo pienses jaja!",
+    "El botón del 'NO' no sirve 💕",
+    "¡El 'SÍ' te está esperando mi niña!"
   ];
 
   let phraseIndex = 0;
