@@ -18,70 +18,51 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================================
-// REPRODUCTOR DE YOUTUBE: https://www.youtube.com/watch?v=bslNoCMejnw
+// REPRODUCTOR DE MÚSICA: KRIS R - 4LIFE
 // ============================================================
-const YOUTUBE_VIDEO_ID = 'bslNoCMejnw';
-let ytPlayer = null;
-let ytReady = false;
-let isAudioPlaying = false;
+let isPlaying = false;
 
-// Callback oficial de YouTube API
-window.onYouTubeIframeAPIReady = function() {
-  ytPlayer = new YT.Player('yt-player', {
-    height: '0',
-    width: '0',
-    videoId: YOUTUBE_VIDEO_ID,
-    playerVars: {
-      autoplay: 0,
-      controls: 0,
-      loop: 1,
-      playlist: YOUTUBE_VIDEO_ID,
-      playsinline: 1
-    },
-    events: {
-      onReady: () => {
-        ytReady = true;
-      }
-    }
-  });
-};
+function getAudio() {
+  return document.getElementById('romantic-audio');
+}
 
-function playRomanticSong() {
+function playSong() {
+  const audio = getAudio();
   const musicStatus = document.getElementById('music-status');
   const musicIcon = document.querySelector('.music-icon');
 
-  if (ytPlayer && ytReady && typeof ytPlayer.playVideo === 'function') {
-    ytPlayer.playVideo();
-    isAudioPlaying = true;
-    if (musicStatus) musicStatus.textContent = "Reproduciendo tu canción 🎶";
-    if (musicIcon) musicIcon.classList.add('spinning');
-  } else {
-    // Fallback con sintetizador suave si el reproductor de YouTube tarda en cargar
-    toggleSynthMelody(true);
+  if (audio) {
+    audio.play().then(() => {
+      isPlaying = true;
+      if (musicStatus) musicStatus.textContent = "KRIS R - 4LIFE 🎶";
+      if (musicIcon) musicIcon.classList.add('spinning');
+    }).catch((err) => {
+      console.log("Reproducción esperando interacción:", err);
+    });
   }
 }
 
-function pauseRomanticSong() {
+function pauseSong() {
+  const audio = getAudio();
   const musicStatus = document.getElementById('music-status');
   const musicIcon = document.querySelector('.music-icon');
 
-  if (ytPlayer && ytReady && typeof ytPlayer.pauseVideo === 'function') {
-    ytPlayer.pauseVideo();
+  if (audio) {
+    audio.pause();
+    isPlaying = false;
+    if (musicStatus) musicStatus.textContent = "Música pausada ⏸️";
+    if (musicIcon) musicIcon.classList.remove('spinning');
   }
-  toggleSynthMelody(false);
-  isAudioPlaying = false;
-  if (musicStatus) musicStatus.textContent = "Música en pausa ⏸️";
-  if (musicIcon) musicIcon.classList.remove('spinning');
 }
 
 function initMusicController() {
   const musicBtn = document.getElementById('music-btn');
   if (musicBtn) {
     musicBtn.addEventListener('click', () => {
-      if (isAudioPlaying) {
-        pauseRomanticSong();
+      if (isPlaying) {
+        pauseSong();
       } else {
-        playRomanticSong();
+        playSong();
       }
     });
   }
@@ -201,8 +182,8 @@ function initEnvelopeOpener() {
       colors: ['#ffe5ec', '#ff758f', '#ffffff', '#fbb1bd']
     });
 
-    // Iniciar canción elegida por el usuario
-    playRomanticSong();
+    // Iniciar canción oficial KRIS R - 4LIFE
+    playSong();
 
     envelopeSection.classList.add('fade-out');
 
@@ -217,7 +198,7 @@ function initEnvelopeOpener() {
 }
 
 // ============================================================
-// 3. CONTADOR DE TIEMPO JUNTOS (CALCULO DESDE EL 28 DE HACE 2 MESES)
+// 3. CONTADOR DE TIEMPO JUNTOS (DESDE EL 28 DE AGOSTO)
 // ============================================================
 function initLoveCounter() {
   const daysEl = document.getElementById('days');
@@ -226,32 +207,18 @@ function initLoveCounter() {
   const secondsEl = document.getElementById('seconds');
   const datePicker = document.getElementById('love-date-picker');
 
-  // Calcular la fecha exacta:
-  // Si cumplieron 1 mes el pasado 28, iniciaron el 28 del mes previo
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth(); // 0-indexed (9 = Oct)
-  
-  // Mes de inicio = dos meses atrás si hoy es antes o después del 28
-  let startMonth = currentMonth - 1;
-  let startYear = currentYear;
-  if (now.getDate() < 28) {
-    // Si hoy estamos a 15, el mes pasado fue el mes anterior
-    startMonth = currentMonth - 2;
-  }
-  if (startMonth < 0) {
-    startMonth += 12;
-    startYear -= 1;
+  // Limpiar cualquier fecha antigua guardada en 2024
+  const stored = localStorage.getItem('isa_love_start_date');
+  if (stored && stored.includes('2024')) {
+    localStorage.removeItem('isa_love_start_date');
   }
 
-  // Formato YYYY-MM-DD
-  const calculatedDefaultDate = `${startYear}-${String(startMonth + 1).padStart(2, '0')}-28`;
+  // Fecha fija oficial: 28 de agosto de 2026 (1 mes cumplido el 28 de septiembre)
+  const officialStartDate = '2026-08-28';
+  const effectiveDate = localStorage.getItem('isa_love_start_date') || officialStartDate;
 
-  // Recuperar fecha guardada o usar la calculada
-  const initialDate = localStorage.getItem('isa_love_start_date') || calculatedDefaultDate;
-  
   if (datePicker) {
-    datePicker.value = initialDate;
+    datePicker.value = effectiveDate;
     datePicker.addEventListener('change', (e) => {
       localStorage.setItem('isa_love_start_date', e.target.value);
       updateTimer();
@@ -259,7 +226,7 @@ function initLoveCounter() {
   }
 
   function updateTimer() {
-    const selectedDateString = datePicker ? datePicker.value : initialDate;
+    const selectedDateString = datePicker ? datePicker.value : effectiveDate;
     const startDate = new Date(selectedDateString + 'T00:00:00');
     const currentTime = new Date();
     
@@ -270,7 +237,7 @@ function initLoveCounter() {
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
     const seconds = Math.floor((diff / 1000) % 60);
 
-    if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+    if (daysEl) daysEl.textContent = String(days);
     if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
     if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
     if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
@@ -421,43 +388,4 @@ function initEscapingNoButton() {
     btnYes.style.display = 'none';
     acceptedMessage.classList.remove('hidden');
   });
-}
-
-// ============================================================
-// SINTETIZADOR DE APOYO
-// ============================================================
-let audioCtx = null;
-let synthInterval = null;
-
-function toggleSynthMelody(play) {
-  if (!play) {
-    if (synthInterval) clearInterval(synthInterval);
-    return;
-  }
-
-  if (!audioCtx) {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    audioCtx = new AudioContext();
-  }
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
-
-  const notes = [261.63, 329.63, 392.00, 493.88, 523.25, 349.23, 440.00, 523.25];
-  let step = 0;
-  if (synthInterval) clearInterval(synthInterval);
-  synthInterval = setInterval(() => {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
-    gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.06, audioCtx.currentTime + 0.08);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.6);
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 1.6);
-    step++;
-  }, 700);
 }
