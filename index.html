@@ -23,6 +23,11 @@
 </head>
 <body>
 
+  <!-- Reproductor Oculto de YouTube para la canción elegida -->
+  <div id="youtube-player-container" style="display: none;">
+    <div id="yt-player"></div>
+  </div>
+
   <!-- Fondo de partículas flotantes -->
   <div id="heart-canvas-container">
     <canvas id="bg-canvas"></canvas>
@@ -32,7 +37,7 @@
   <div class="music-pill" id="music-control">
     <button id="music-btn" class="music-toggle-btn" title="Música romántica">
       <i data-lucide="music" class="music-icon spinning"></i>
-      <span id="music-status">Tocar melodía</span>
+      <span id="music-status">Poner música 🎵</span>
     </button>
   </div>
 
@@ -76,10 +81,12 @@
     <!-- Contador de Tiempo Juntos -->
     <section class="section-card counter-section">
       <div class="section-tag">
-        <i data-lucide="clock"></i> Nuestro Tiempo
+        <i data-lucide="clock"></i> Nuestro Aniversario (Cada 28)
       </div>
       <h2>Cada segundo a tu lado vale oro</h2>
-      <p class="section-desc">El tiempo vuela, pero a tu lado cada instante se vuelve un recuerdo eterno.</p>
+      <p class="section-desc" id="anniversary-subtitle">
+        ¡El mes pasado cumplimos nuestro primer mes y cada día te amo más! 💕
+      </p>
       
       <div class="timer-grid" id="timer-grid">
         <div class="time-box">
@@ -100,9 +107,9 @@
         </div>
       </div>
       <div class="timer-controls">
-        <label for="love-date-picker">¿Quieres ajustar la fecha de inicio?</label>
+        <label for="love-date-picker">Nuestra fecha especial (Iniciamos el 28):</label>
         <div class="date-input-wrapper">
-          <input type="date" id="love-date-picker" value="2024-01-01">
+          <input type="date" id="love-date-picker" value="2026-08-28">
         </div>
       </div>
     </section>
@@ -116,7 +123,7 @@
         </div>
         <div class="letter-body">
           <p class="typewriter-text" id="typewriter-body">
-            No hay suficientes palabras ni estrellas en el firmamento para explicarte lo que provocas en mí. Llegaste a mi vida como una luz cálida, transformando mis días grises en sonrisas infinitas. Amo tu ternura, la forma tan única en la que me miras, cómo me haces sentir en calma aun cuando el mundo parece un caos, y sobre todo, amo construir a tu lado este hermoso camino.
+            No hay suficientes palabras ni estrellas en el firmamento para explicarte lo que provocas en mí. Llegaste a mi vida como una luz cálida, transformando mis días en sonrisas infinitas. Amo tu ternura, la forma tan única en la que me miras, cómo me haces sentir en calma aun cuando el mundo parece un caos, y sobre todo, amo compartir cada 28 a tu lado.
           </p>
           <p>
             Prometo cuidarte, abrazarte en tus días difíciles, celebrar cada uno de tus triunfos y amarte más cada nuevo amanecer. Eres mi lugar seguro y mi mayor alegría.
@@ -125,6 +132,41 @@
         <div class="letter-footer">
           <p>Con todo mi corazón,</p>
           <span class="signature">Tu eterno enamorado 💕</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Galería de Recuerdos con las Fotos Reales de Roblox -->
+    <section class="section-card gallery-section">
+      <div class="section-tag">
+        <i data-lucide="camera"></i> Álbum De Recuerdos
+      </div>
+      <h2>Nuestros Momentos Inolvidables</h2>
+      <p class="section-desc">Pasa el ratón sobre cada foto o tócala para verla de cerca ✨</p>
+
+      <div class="polaroid-grid">
+        <div class="polaroid-item" style="--rotation: -3deg;">
+          <div class="polaroid-pin">📌</div>
+          <div class="polaroid-img-wrapper">
+            <img src="foto1.png" alt="Abrazo con Isabela" class="polaroid-img" />
+          </div>
+          <p class="polaroid-caption">Tus abrazos son mi hogar 🫂❤️</p>
+        </div>
+
+        <div class="polaroid-item" style="--rotation: 2deg;">
+          <div class="polaroid-pin">📌</div>
+          <div class="polaroid-img-wrapper">
+            <img src="foto2.jpg" alt="Columpio bajo el árbol" class="polaroid-img" />
+          </div>
+          <p class="polaroid-caption">Juntos bajo las estrellas 🌙✨</p>
+        </div>
+
+        <div class="polaroid-item" style="--rotation: -2deg;">
+          <div class="polaroid-pin">📌</div>
+          <div class="polaroid-img-wrapper">
+            <img src="foto3.png" alt="Celebrando con bengalas" class="polaroid-img" />
+          </div>
+          <p class="polaroid-caption">Celebrando cada momento juntos 🎆🌸</p>
         </div>
       </div>
     </section>
@@ -139,7 +181,7 @@
 
       <div class="reason-display-card" id="reason-card">
         <div class="reason-icon">💖</div>
-        <h3 id="reason-text">"Amo tu risa que ilumina cualquier día nublado."</h3>
+        <h3 id="reason-text">"Amo cómo se siente tenerte cerca y jugar juntos cada día."</h3>
       </div>
 
       <div class="reason-actions">
@@ -147,41 +189,6 @@
           <i data-lucide="sparkles"></i> Descubrir otra razón
         </button>
         <span class="reason-counter" id="reason-counter">Razón 1 de 20</span>
-      </div>
-    </section>
-
-    <!-- Galería de Recuerdos Estilo Polaroids -->
-    <section class="section-card gallery-section">
-      <div class="section-tag">
-        <i data-lucide="camera"></i> Álbum De Recuerdos
-      </div>
-      <h2>Nuestros Momentos Inolvidables</h2>
-      <p class="section-desc">Pasa el ratón sobre cada foto o tócala para verla mejor. ¡Puedes personalizar estas fotos!</p>
-
-      <div class="polaroid-grid">
-        <div class="polaroid-item" style="--rotation: -3deg;">
-          <div class="polaroid-pin">📌</div>
-          <div class="polaroid-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=700&q=80" alt="Amor" class="polaroid-img" />
-          </div>
-          <p class="polaroid-caption">Donde empezó nuestra magia ✨</p>
-        </div>
-
-        <div class="polaroid-item" style="--rotation: 2deg;">
-          <div class="polaroid-pin">📌</div>
-          <div class="polaroid-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=700&q=80" alt="Juntos" class="polaroid-img" />
-          </div>
-          <p class="polaroid-caption">Tus abrazos son mi hogar 🫂</p>
-        </div>
-
-        <div class="polaroid-item" style="--rotation: -2deg;">
-          <div class="polaroid-pin">📌</div>
-          <div class="polaroid-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=700&q=80" alt="Sonrisas" class="polaroid-img" />
-          </div>
-          <p class="polaroid-caption">Risas que no cambiaría por nada 🌸</p>
-        </div>
       </div>
     </section>
 
@@ -218,11 +225,13 @@
         <i data-lucide="heart" class="beat-heart"></i>
       </div>
       <p>Hecho con amor exclusivo para <strong>Isabela</strong></p>
-      <p class="footer-sub">Para siempre y por siempre juntos.</p>
+      <p class="footer-sub">Felices meses, mi niña hermosa.</p>
     </footer>
 
   </main>
 
+  <!-- YouTube IFrame API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -7,15 +7,85 @@ document.addEventListener('DOMContentLoaded', () => {
     window.lucide.createIcons();
   }
 
-  // Inicializar todas las funciones interactivas
+  // Inicializar funciones interactivas
   initCanvasHearts();
   initEnvelopeOpener();
   initLoveCounter();
   initLoveLetterDate();
   initReasonsGenerator();
   initEscapingNoButton();
-  initWebAudioSynthesizer();
+  initMusicController();
 });
+
+// ============================================================
+// REPRODUCTOR DE YOUTUBE: https://www.youtube.com/watch?v=bslNoCMejnw
+// ============================================================
+const YOUTUBE_VIDEO_ID = 'bslNoCMejnw';
+let ytPlayer = null;
+let ytReady = false;
+let isAudioPlaying = false;
+
+// Callback oficial de YouTube API
+window.onYouTubeIframeAPIReady = function() {
+  ytPlayer = new YT.Player('yt-player', {
+    height: '0',
+    width: '0',
+    videoId: YOUTUBE_VIDEO_ID,
+    playerVars: {
+      autoplay: 0,
+      controls: 0,
+      loop: 1,
+      playlist: YOUTUBE_VIDEO_ID,
+      playsinline: 1
+    },
+    events: {
+      onReady: () => {
+        ytReady = true;
+      }
+    }
+  });
+};
+
+function playRomanticSong() {
+  const musicStatus = document.getElementById('music-status');
+  const musicIcon = document.querySelector('.music-icon');
+
+  if (ytPlayer && ytReady && typeof ytPlayer.playVideo === 'function') {
+    ytPlayer.playVideo();
+    isAudioPlaying = true;
+    if (musicStatus) musicStatus.textContent = "Reproduciendo tu canción 🎶";
+    if (musicIcon) musicIcon.classList.add('spinning');
+  } else {
+    // Fallback con sintetizador suave si el reproductor de YouTube tarda en cargar
+    toggleSynthMelody(true);
+  }
+}
+
+function pauseRomanticSong() {
+  const musicStatus = document.getElementById('music-status');
+  const musicIcon = document.querySelector('.music-icon');
+
+  if (ytPlayer && ytReady && typeof ytPlayer.pauseVideo === 'function') {
+    ytPlayer.pauseVideo();
+  }
+  toggleSynthMelody(false);
+  isAudioPlaying = false;
+  if (musicStatus) musicStatus.textContent = "Música en pausa ⏸️";
+  if (musicIcon) musicIcon.classList.remove('spinning');
+}
+
+function initMusicController() {
+  const musicBtn = document.getElementById('music-btn');
+  if (musicBtn) {
+    musicBtn.addEventListener('click', () => {
+      if (isAudioPlaying) {
+        pauseRomanticSong();
+      } else {
+        playRomanticSong();
+      }
+    });
+  }
+}
 
 // ============================================================
 // 1. PARTICULAS FLOTANTES DE CORAZONES EN CANVAS
@@ -58,7 +128,6 @@ function initCanvasHearts() {
       ctx.globalAlpha = this.opacity;
       ctx.fillStyle = this.color;
       
-      // Dibujar forma de corazón con curvas Bezier
       ctx.beginPath();
       const topCurveHeight = this.size * 0.3;
       ctx.moveTo(0, topCurveHeight);
@@ -83,7 +152,6 @@ function initCanvasHearts() {
     }
   }
 
-  // Crear corazones continuos de fondo
   for (let i = 0; i < 25; i++) {
     hearts.push(new Heart());
   }
@@ -95,13 +163,11 @@ function initCanvasHearts() {
       heart.update();
       heart.draw();
 
-      // Reciclar corazones que salen por arriba
       if (!heart.isBurst && heart.y < -30) {
         heart.y = height + 10;
         heart.x = Math.random() * width;
       }
 
-      // Eliminar partículas de click
       if (heart.isBurst && heart.life <= 0) {
         hearts.splice(index, 1);
       }
@@ -111,9 +177,7 @@ function initCanvasHearts() {
   }
   animate();
 
-  // Crear mini explosión de corazones al hacer click en cualquier parte
   window.addEventListener('click', (e) => {
-    // Si no es un botón interactivo, lanzar mini destellos
     for (let i = 0; i < 6; i++) {
       hearts.push(new Heart(e.clientX, e.clientY, true));
     }
@@ -130,16 +194,15 @@ function initEnvelopeOpener() {
   const mainContent = document.getElementById('main-content');
 
   function openLetter() {
-    // Lanzar confeti estelar
     confetti({
-      particleCount: 120,
-      spread: 80,
+      particleCount: 130,
+      spread: 85,
       origin: { y: 0.6 },
       colors: ['#ffe5ec', '#ff758f', '#ffffff', '#fbb1bd']
     });
 
-    // Iniciar melodía suave automáticamente con la acción del usuario
-    toggleMelody(true);
+    // Iniciar canción elegida por el usuario
+    playRomanticSong();
 
     envelopeSection.classList.add('fade-out');
 
@@ -154,7 +217,7 @@ function initEnvelopeOpener() {
 }
 
 // ============================================================
-// 3. CONTADOR DE TIEMPO JUNTOS
+// 3. CONTADOR DE TIEMPO JUNTOS (CALCULO DESDE EL 28 DE HACE 2 MESES)
 // ============================================================
 function initLoveCounter() {
   const daysEl = document.getElementById('days');
@@ -163,10 +226,32 @@ function initLoveCounter() {
   const secondsEl = document.getElementById('seconds');
   const datePicker = document.getElementById('love-date-picker');
 
-  // Recuperar fecha guardada o usar una por defecto
-  const savedDate = localStorage.getItem('isa_love_start_date') || '2024-01-01';
+  // Calcular la fecha exacta:
+  // Si cumplieron 1 mes el pasado 28, iniciaron el 28 del mes previo
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth(); // 0-indexed (9 = Oct)
+  
+  // Mes de inicio = dos meses atrás si hoy es antes o después del 28
+  let startMonth = currentMonth - 1;
+  let startYear = currentYear;
+  if (now.getDate() < 28) {
+    // Si hoy estamos a 15, el mes pasado fue el mes anterior
+    startMonth = currentMonth - 2;
+  }
+  if (startMonth < 0) {
+    startMonth += 12;
+    startYear -= 1;
+  }
+
+  // Formato YYYY-MM-DD
+  const calculatedDefaultDate = `${startYear}-${String(startMonth + 1).padStart(2, '0')}-28`;
+
+  // Recuperar fecha guardada o usar la calculada
+  const initialDate = localStorage.getItem('isa_love_start_date') || calculatedDefaultDate;
+  
   if (datePicker) {
-    datePicker.value = savedDate;
+    datePicker.value = initialDate;
     datePicker.addEventListener('change', (e) => {
       localStorage.setItem('isa_love_start_date', e.target.value);
       updateTimer();
@@ -174,11 +259,11 @@ function initLoveCounter() {
   }
 
   function updateTimer() {
-    const startDate = new Date(datePicker ? datePicker.value : savedDate);
-    const now = new Date();
+    const selectedDateString = datePicker ? datePicker.value : initialDate;
+    const startDate = new Date(selectedDateString + 'T00:00:00');
+    const currentTime = new Date();
     
-    // Diferencia en milisegundos
-    const diff = Math.max(0, now - startDate);
+    const diff = Math.max(0, currentTime - startDate);
 
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -212,26 +297,26 @@ function initLoveLetterDate() {
 // ============================================================
 function initReasonsGenerator() {
   const reasons = [
-    "Amo cómo se ilumina tu carita cada vez que te ríes.",
-    "Amo la paz que transmites con solo tomar mi mano.",
-    "Amo tu voz, es la melodía más dulce que he escuchado en mi vida.",
-    "Amo tu manera tan tierna y única de ver el mundo.",
-    "Amo la forma en que me miras y me haces sentir la persona más afortunada.",
-    "Amo tus abrazos, son mi refugio perfecto en cualquier tormenta.",
-    "Amo cómo te preocupas por las personas que quieres con un corazón tan puro.",
+    "Amo cómo nos divertimos juntos jugando y riendo.",
+    "Amo que cada 28 sea un recordatorio de lo mucho que te quiero.",
+    "Amo tu voz, es la melodía más dulce que he escuchado.",
+    "Amo que contigo puedo ser yo mismo sin miedo a nada.",
+    "Amo la forma en que me miras y me haces sentir en las nubes.",
+    "Amo tus abrazos, son mi lugar favorito en el mundo entero.",
     "Amo tus ocurrencias y la facilidad con la que me sacas una sonrisa.",
-    "Amo que contigo puedo ser 100% yo mismo sin ningún miedo.",
     "Amo soñar despierto e imaginar un futuro infinito a tu lado.",
-    "Amo la calidez de tus besitos inesperados.",
-    "Amo lo inteligente y perseverante que eres para lograr lo que te propones.",
-    "Amo cómo haces que los días más simples se conviertan en recuerdos inolvidables.",
-    "Amo escuchar tus historias y ver el brillo en tus ojos al hablar.",
-    "Amo la dulzura infinita que guardas en tu corazón.",
-    "Amo que cada segundo contigo siempre sabe a poco.",
-    "Amo que eres mi mejor amiga, mi compañera y el amor de mi vida.",
-    "Amo tu paciencia y el amor con el que me acompañas día a día.",
-    "Amo cada detalle, cada gesto y cada suspiro tuyo.",
-    "Y sobre todo: ¡Amo que existas en este universo y seas mi Isabela!"
+    "Amo cuando nos quedamos hablando de cualquier tontería.",
+    "Amo cómo te preocupas por mí con ese corazón tan noble.",
+    "Amo que cada segundo a tu lado siempre se me pasa volando.",
+    "Amo celebrar cada 28 a tu lado y ver cómo crece nuestro amor.",
+    "Amo que eres mi personita favorita en todo el universo.",
+    "Amo ver cómo sonríes cuando te digo que te amo.",
+    "Amo cada detalle, cada gesto y cada momento juntos.",
+    "Amo lo hermosa y única que eres por dentro y por fuera.",
+    "Amo que me alegres el día con un solo mensajito tuyo.",
+    "Amo nuestro primer mes y todos los meses que aún nos faltan por vivir.",
+    "Amo que seas mi niña consentida.",
+    "¡Y sobre todo, amo que existas y seas mi Isabela hermosa!"
   ];
 
   let currentIndex = 0;
@@ -243,7 +328,6 @@ function initReasonsGenerator() {
   if (!btnNext || !reasonText) return;
 
   btnNext.addEventListener('click', () => {
-    // Animación de salida
     reasonCard.style.opacity = '0';
     reasonCard.style.transform = 'scale(0.95)';
 
@@ -254,11 +338,9 @@ function initReasonsGenerator() {
         reasonCounter.textContent = `Razón ${currentIndex + 1} de ${reasons.length}`;
       }
 
-      // Animación de entrada
       reasonCard.style.opacity = '1';
       reasonCard.style.transform = 'scale(1)';
 
-      // Disparar pequeño confeti temático
       confetti({
         particleCount: 25,
         spread: 45,
@@ -296,11 +378,9 @@ function initEscapingNoButton() {
     const y = (Math.random() - 0.5) * 120;
     btnNo.style.transform = `translate(${x}px, ${y}px)`;
     
-    // Cambiar texto juguetonamente
     btnNo.textContent = playfulPhrases[phraseIndex % playfulPhrases.length];
     phraseIndex++;
 
-    // Hacer crecer el botón SÍ
     yesScale += 0.08;
     btnYes.style.transform = `scale(${yesScale})`;
   }
@@ -311,9 +391,7 @@ function initEscapingNoButton() {
     moveNoButton();
   });
 
-  // Al hacer clic en SÍ
   btnYes.addEventListener('click', () => {
-    // Gran explosión de confeti en toda la pantalla
     const duration = 3.5 * 1000;
     const animationEnd = Date.now() + duration;
 
@@ -346,88 +424,40 @@ function initEscapingNoButton() {
 }
 
 // ============================================================
-// 7. SINTETIZADOR DE MÚSICA ROMÁNTICA (WEB AUDIO API)
-// Sin necesidad de archivos mp3 externos que puedan fallar!
+// SINTETIZADOR DE APOYO
 // ============================================================
 let audioCtx = null;
-let isMelodyPlaying = false;
-let melodyInterval = null;
+let synthInterval = null;
 
-function initWebAudioSynthesizer() {
-  const musicBtn = document.getElementById('music-btn');
-  if (musicBtn) {
-    musicBtn.addEventListener('click', () => {
-      toggleMelody();
-    });
+function toggleSynthMelody(play) {
+  if (!play) {
+    if (synthInterval) clearInterval(synthInterval);
+    return;
   }
-}
-
-function toggleMelody(forcePlay = false) {
-  const musicStatus = document.getElementById('music-status');
-  const musicIcon = document.querySelector('.music-icon');
 
   if (!audioCtx) {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     audioCtx = new AudioContext();
   }
-
   if (audioCtx.state === 'suspended') {
     audioCtx.resume();
   }
 
-  if (forcePlay && isMelodyPlaying) return;
-
-  if (isMelodyPlaying && !forcePlay) {
-    // Detener melodía
-    isMelodyPlaying = false;
-    clearInterval(melodyInterval);
-    if (musicStatus) musicStatus.textContent = "Pausado";
-    if (musicIcon) musicIcon.classList.remove('spinning');
-  } else {
-    // Iniciar melodía suave estilo caja de música romántica (Lofi chimes)
-    isMelodyPlaying = true;
-    if (musicStatus) musicStatus.textContent = "Melodía sonando 🎶";
-    if (musicIcon) musicIcon.classList.add('spinning');
-    startRomanticChimes();
-  }
-}
-
-function startRomanticChimes() {
-  // Notas de acorde romántico cálido (Cmaj7 - Fmaj7 - G - Am)
-  const notes = [
-    261.63, 329.63, 392.00, 493.88, 523.25, 
-    349.23, 440.00, 523.25, 659.25, 
-    392.00, 493.88, 587.33, 
-    440.00, 523.25, 659.25
-  ];
-
+  const notes = [261.63, 329.63, 392.00, 493.88, 523.25, 349.23, 440.00, 523.25];
   let step = 0;
-  melodyInterval = setInterval(() => {
-    if (!isMelodyPlaying) return;
-    const freq = notes[step % notes.length];
-    playSweetChime(freq);
+  if (synthInterval) clearInterval(synthInterval);
+  synthInterval = setInterval(() => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
+    gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.06, audioCtx.currentTime + 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.6);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 1.6);
     step++;
-  }, 650);
-}
-
-function playSweetChime(frequency) {
-  if (!audioCtx) return;
-
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-
-  // Tipo de onda sinusoidal pura y suave como campanas
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(frequency, audioCtx.currentTime);
-
-  // Envolvente de sonido suave (Fade in y fade out cálido)
-  gain.gain.setValueAtTime(0.001, audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 0.08);
-  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.8);
-
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-
-  osc.start();
-  osc.stop(audioCtx.currentTime + 1.8);
+  }, 700);
 }
