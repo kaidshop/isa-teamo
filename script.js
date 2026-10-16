@@ -267,9 +267,8 @@ function initReasonsGenerator() {
     "Amo jugar Roblox juntos y hacer tonterías hasta tarde.",
     "Amo que cada 28 sea nuestro día especial y lo celebremos juntos.",
     "Amo cuando nos quedamos dormidos en llamada y saber que estás ahí conmigo.",
-    "Amo los mensajitos de buenos días que me mandas apenas te levantas.",
+    "Amo que nos chateemos apenas nos despertemos, aunque siempre me levanto temprano yo... nah mentira jaja tú sabes que yo soy el dormilón.",
     "Amo cuando me cuentas cómo estuvo tu día con tanta emoción.",
-    "Amo tus fotos y los videitos tiernos que me mandas cuando te arreglas.",
     "Amo que la distancia no importe para nada cuando se trata de lo que sentimos.",
     "Amo imaginar el día exacto en que por fin llegue a donde estás y te dé ese abrazo tan esperado.",
     "Amo que seas mi niña consentida y la persona que más me alegra el día.",
@@ -277,11 +276,10 @@ function initReasonsGenerator() {
     "Amo cómo nos apoyamos en todo a pesar de los kilómetros.",
     "Amo que contigo puedo ser yo mismo, decir tonterías y reírnos a carcajadas.",
     "Amo planear todo lo que vamos a hacer juntos cuando nos veamos en persona.",
-    "Amo tu voz en los audios de WhatsApp, me da una paz increíble.",
     "Amo nuestro primer mes y todos los meses que nos faltan por cumplir.",
     "Amo lo hermosa que eres, por fuera y sobre todo por dentro.",
     "Amo que seas tú, mi Isabela, la única dueña de mi corazón.",
-    "¡Y sobre todo, amo ser tu novio Sergio y que tú seas mi niña hermosa!"
+    "¡Y sobre todo, amo ser tu novio y que tú seas mi niña hermosa!"
   ];
 
   let currentIndex = 0;
